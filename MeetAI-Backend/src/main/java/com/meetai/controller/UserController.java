@@ -9,6 +9,7 @@ import com.meetai.entity.User;
 import com.meetai.service.UserService;
 
 @RestController
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     private final UserService userService;
@@ -17,27 +18,39 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Home API
-    @GetMapping("/")
-    public String home() {
-        return "Welcome to MeetAI Backend";
-    }
-
     // Save User
-    @PostMapping("/api/v1/users")
+    @PostMapping
     public ResponseEntity<User> saveUser(@RequestBody User user) {
-
-        User savedUser = userService.saveUser(user);
-
-        return ResponseEntity.ok(savedUser);
+        return ResponseEntity.ok(userService.saveUser(user));
     }
 
     // Get All Users
-    @GetMapping("/api/v1/users")
+    @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
-
-        List<User> users = userService.getAllUsers();
-
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(userService.getAllUsers());
     }
+
+    // Get User By Id
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    // Update User
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id,
+                                           @RequestBody User user) {
+
+        return ResponseEntity.ok(userService.updateUser(id, user));
+    }
+
+    // Delete User
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+
+        userService.deleteUser(id);
+
+        return ResponseEntity.ok("User Deleted Successfully");
+    }
+
 }
